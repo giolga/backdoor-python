@@ -9,3 +9,17 @@ s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1):
 socket.SOL_SOCKET: This is a socket-level option, meaning the option being set applies to the socket itself.
 socket.SO_REUSEADDR: This allows the socket to reuse a local address (IP + port) without waiting for a timeout after the socket is closed. It's useful for restarting a server immediately after it was stopped.
 1: This is the boolean value enabling the SO_REUSEADDR option (where 1 means True).
+-------
+
+proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+
+shell=True: Runs the command inside a shell, which allows things like piping (|) and wildcard expansion (*). But be careful—it can be risky if command comes from user input (risk of shell injection).
+stdout=subprocess.PIPE: Captures the standard output (stdout) of the process. This allows Python to read the command’s output instead of printing it directly.
+stderr=subprocess.PIPE: Captures the standard error (stderr), meaning if the command fails, its error message won't be lost.
+stdin=subprocess.PIPE: Allows sending input to the process, useful when the command expects user interaction.
+
+result = proc.stdout.read() + proc.stderr.read()
+proc.stdout.read(): Reads everything that the command outputs (standard output).
+proc.stderr.read(): Reads any error messages (standard error).
++: Combines both outputs into one variable (result), so you can see both the success output and any errors together.
+------
