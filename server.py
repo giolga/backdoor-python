@@ -51,7 +51,7 @@ def shell():
                 if image_decoded[:4] == b'[!!]':
                     print(image_decoded.decode())
                 else:
-                    with open("screenshot%d" % count, 'wb') as screen:
+                    with open("screenshot%d.jpg" % count, 'wb') as screen:
                         screen.write(image_decoded)
                     count += 1
             except Exception as e:

