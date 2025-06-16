@@ -69,7 +69,7 @@ def server():
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # Create a TCP socket
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # Allow address reuse
-    s.bind(('192.168.1.110', 15555)) 
+    s.bind(('192.168.1.119', 15555)) 
     s.listen(5)
 
     print("Listening for incoming connections")
