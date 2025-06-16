@@ -67,13 +67,13 @@ def server():
     global ip
     global target
 
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    s.bind(('192.168.1.110', 15555))
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # Create a TCP socket
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # Allow address reuse
+    s.bind(('192.168.1.110', 15555)) 
     s.listen(5)
 
     print("Listening for incoming connections")
-    target, ip = s.accept()
+    target, ip = s.accept() # Accept a connection from a client;
     print('Target connected!')
 
 server()

